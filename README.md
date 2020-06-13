@@ -1,2 +1,2 @@
 # Operating Systems
-Operating System class repository
+Operating System course repository
