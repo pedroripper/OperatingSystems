@@ -11,7 +11,9 @@
 int main(){
 	int i, j, k;
 	int *x;
-	x = (int *)shmat(IPC_PRIVATE, 0, 0);;
+	int shmemXkey = shmget(IPC_PRIVATE, sizeof(int),
+		IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
+	x = (int *)shmat(shmemXkey, 0, 0);;
 	*x = 0;
 
 	if(fork() == 0){
@@ -19,15 +21,17 @@ int main(){
 			for(i = 0; i < LOOP; i ++){
 				*x += 3;
 			}
+			exit(0);
 		}
 		else{
-			for(j = 0; i < LOOP; i ++){
+			for(j = 0; j < LOOP; j ++){
 				*x += 2;
 			}
+		exit(0);
 		}
 	}
 	else {
-		for(k = 0; i < LOOP; i ++){
+		for(k = 0; k < LOOP;  k++){
 				*x += 1;
 		}
 	}
