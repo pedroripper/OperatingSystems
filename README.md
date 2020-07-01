@@ -1,2 +1,2 @@
-# Operating Systems
-Operating System course repository
+# 🎲🎲🎲 yahtzee 🎲🎲🎲
+Yahtzee Game made with Tkinter
