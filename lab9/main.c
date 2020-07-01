@@ -27,7 +27,6 @@ void createDirectory(char *dirName){
 void changeDirectory(char *path){
 	char directory[20] = "./";
 	strcat(directory, path);
-	printf("%s\n", directory);
 	chdir(directory); 
 }
 
@@ -54,12 +53,33 @@ void question_one(){
 	changeDirectory("..");
 	changeDirectory("c");
 	createFile("arqc.txt");
+	changeDirectory("../..");
+}
+
+
+/*
+Questao 2
+Exibir os atributos de um dos arquivos criados.
+*/
+void readFile(char *fileName){
+	char text[MAX_TEXT];
+	FILE *readFile = fopen(fileName, "r");
+	fscanf(readFile, "%[^\n]", text);
+   	printf("%s\n", text );
+}
+
+void question_two(){
+	changeDirectory("so");
+	changeDirectory("a");
+	readFile("arqa.txt");
+	changeDirectory("../..");
 }
 
 
 
 int main(){
-	question_one();
+	// question_one();
+	question_two();
 
 	return 0;
 
