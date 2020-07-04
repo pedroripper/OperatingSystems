@@ -6,6 +6,9 @@
 #include <stdlib.h> 
 #include <dirent.h>
 
+
+#define _POSIX_SOURCE
+#define S_IRUSR 0000400
 #define MAX_TEXT 50
 
 /*
@@ -144,11 +147,28 @@ void question_four(){
 }
 
 
+/*
+Questao 5
+Mudar a permissão de acesso ao arquivo.
+*/
+
+void changeFilePermission(char *fileName){
+	chmod(fileName, S_IRUSR);
+}
+
+void question_five(){
+	changeDirectory("so");
+	changeDirectory("a");
+	changeFilePermission("arqa.txt");
+	readFile("arqa.txt");
+}
+
 int main(){
 	// question_one();
 	// question_two();
 	// question_three();
-	question_four();
+	// question_four();
+	question_five();
 
 	return 0;
 
