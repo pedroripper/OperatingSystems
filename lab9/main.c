@@ -92,7 +92,7 @@ int searchFile(char *fileName){
   
     if (directory == NULL)  // opendir returns NULL if couldn't open directory 
     { 
-        return 0; 
+        return 1; 
     } 
     while ((de = readdir(directory)) != NULL) {
     	if(strcmp(de->d_name,".") == 0|| strcmp(de->d_name,"..") == 0 || strcmp(de->d_name,"..") == 0) {
@@ -107,11 +107,8 @@ int searchFile(char *fileName){
             }
     }
     changeDirectory("..");
-  
     
     return 0; 
-      
-    return 0;
 
 }
 
@@ -122,10 +119,36 @@ void question_three(){
 }
 
 
+/*
+Questao 4
+Alterar o conteúdo do arquivo, exibindo o resultado obtido. 
+Usar a primitiva seek() para realizar esta alteração.
+*/
+
+void changeFile(char *fileName){
+	FILE *fp;
+
+	fp = fopen(fileName,"w");
+	fseek(fp, 0, SEEK_END);
+	fputs("os pedros sao os austin bois", fp);
+	fclose(fp);
+
+}
+
+void question_four(){
+	changeDirectory("so");
+	changeDirectory("a");
+	readFile("arqa.txt");
+	changeFile("arqa.txt");
+	readFile("arqa.txt");
+}
+
+
 int main(){
 	// question_one();
 	// question_two();
-	question_three();
+	// question_three();
+	question_four();
 
 	return 0;
 
