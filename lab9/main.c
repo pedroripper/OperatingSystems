@@ -25,10 +25,10 @@ void createDirectory(char *dirName){
 	}
 }
 
-void changeDirectory(char *path){
+int changeDirectory(char *path){
 	char directory[20] = "./";
 	strcat(directory, path);
-	chdir(directory); 
+	return chdir(directory); 
 }
 
 void createFile(char *fileName){
@@ -88,25 +88,28 @@ Questao 3
 int searchFile(char *fileName){
 	struct dirent *de;
 	DIR *directory = opendir("."); 
-	if (directory == NULL) { 
+
+  
+    if (directory == NULL)  // opendir returns NULL if couldn't open directory 
+    { 
         return 0; 
     } 
-    if(readFile(fileName) == 1){
-		while ((de = readdir(directory)) != NULL){ 
-			if(strcmp(de->d_name,".") == 0|| strcmp(de->d_name,"..") == 0 || strcmp(de->d_name,"..") == 0){
-				printf("cai\n");
+    while ((de = readdir(directory)) != NULL) {
+    	if(strcmp(de->d_name,".") == 0|| strcmp(de->d_name,"..") == 0 || strcmp(de->d_name,"..") == 0) {
 				continue;
-			}
-			printf("%s\n", de->d_name); 
-			changeDirectory(de->d_name);
-			if(searchFile(fileName) == 0){
-				exit(0);
-			}
 		}
-	closedir(directory); 
-    } else {
-    	return 0;
+		if(strcmp(de->d_name,fileName) == 0){
+			readFile(fileName);
+		}
+            if(de->d_type == DT_DIR) {
+            	changeDirectory(de->d_name);
+            	searchFile(fileName);
+            }
     }
+    changeDirectory("..");
+  
+    
+    return 0; 
       
     return 0;
 
@@ -115,7 +118,7 @@ int searchFile(char *fileName){
 
 void question_three(){
 	changeDirectory("so");
-	searchFile("arqb.txt");
+	searchFile("arqc.txt");
 }
 
 
