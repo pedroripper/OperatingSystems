@@ -1,11 +1,12 @@
 #include <stdio.h>
-#include <sys/types.h> 
-#include <sys/stat.h> 
 #include <unistd.h> 
 #include <string.h>
 #include <stdlib.h> 
 #include <dirent.h>
+#include <time.h>
 
+#include <sys/types.h> 
+#include <sys/stat.h> 
 
 #define _POSIX_SOURCE
 #define S_IRUSR 0000400
@@ -77,9 +78,27 @@ int readFile(char *fileName){
 }
 
 void question_two(){
+	struct stat *fileAtts = (struct stat *)malloc(sizeof(struct stat));
+
 	changeDirectory("so");
 	changeDirectory("a");
-	readFile("arqa.txt");
+
+
+	stat("./arqa.txt", fileAtts);
+
+	printf("Atributos do arquivo /so/a/arqa.txt:\n");
+	printf("ID do Dispostivo: %#x\n", fileAtts->st_dev);
+	printf("Numero i-node: %ld\n", fileAtts->st_ino);
+	printf("Modo: %lo\n", fileAtts->st_mode);
+	printf("Numero de hardlinks: %d\n", fileAtts->st_nlink);
+	printf("UID do Dono: %ld\n", fileAtts->st_uid);
+	printf("GID do Dono: %ld\n", fileAtts->st_gid);
+	printf("Tamanho (em bytes): %lld\n", fileAtts->st_size);
+	printf("Tamanho do bloco para E/S do SA: %lld\n", fileAtts->st_blksize);
+	printf("Ultima mudanca de status: %s", ctime(&fileAtts->st_ctime));
+	printf("Ultimo acesso: %s", ctime(&fileAtts->st_atime));
+	printf("Ultimo modificacao: %s", ctime(&fileAtts->st_mtime));
+
 	changeDirectory("../..");
 }
 
@@ -117,6 +136,7 @@ int searchFile(char *fileName){
 
 
 void question_three(){
+	printf("Buscando e lendo arqc.txt:\n");
 	changeDirectory("so");
 	searchFile("arqc.txt");
 }
@@ -133,16 +153,19 @@ void changeFile(char *fileName){
 
 	fp = fopen(fileName,"w");
 	fseek(fp, 0, SEEK_END);
-	fputs("os pedros sao os austin bois", fp);
+	fputs("Hello", fp);
 	fclose(fp);
 
 }
 
 void question_four(){
+	printf("Alterando arqa.txt...\n");
 	changeDirectory("so");
 	changeDirectory("a");
+	printf("Conteúdo antigo: ");
 	readFile("arqa.txt");
 	changeFile("arqa.txt");
+	printf("Conteúdo novo: ");
 	readFile("arqa.txt");
 }
 
@@ -153,23 +176,28 @@ Mudar a permissão de acesso ao arquivo.
 */
 
 void changeFilePermission(char *fileName){
-	chmod(fileName, S_IRUSR);
+	chmod(fileName, S_IRUSR | S_IWUSR | S_IROTH);
 }
 
 void question_five(){
+	struct stat *fileAtts = (struct stat *)malloc(sizeof(struct stat));
+
 	changeDirectory("so");
 	changeDirectory("a");
+	stat("./arqa.txt", fileAtts);
+	printf("Permissoes antigas: %lo\n", fileAtts->st_mode);
 	changeFilePermission("arqa.txt");
+	stat("./arqa.txt", fileAtts);
+	printf("Permissoes novas: %lo\n", fileAtts->st_mode);
 	readFile("arqa.txt");
 }
 
 int main(){
-	// question_one();
-	// question_two();
-	// question_three();
-	// question_four();
+	question_one();
+	question_two();
+	question_three();
+	question_four();
 	question_five();
 
 	return 0;
-
 }
